@@ -6,6 +6,7 @@ public abstract class Mob {
     private double x;
     private double y;
     private boolean survival;
+    private boolean killing;
 
     public double getX() {
         return x;
@@ -32,4 +33,12 @@ public abstract class Mob {
     }
 
     public abstract void draw(GraphicsContext render);
+
+    public boolean isKilling() {
+        return killing;
+    }
+
+    public void setKilling(boolean killing) {
+        this.killing = killing;
+    }
 }
