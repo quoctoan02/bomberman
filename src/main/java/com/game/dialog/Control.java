@@ -32,5 +32,4 @@ public abstract class Control {
         this.y = y;
     }
 
-    public abstract void draw(GraphicsContext render);
 }

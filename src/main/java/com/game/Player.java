@@ -26,14 +26,21 @@ public class Player extends Mob {
     private final Canvas camera;
     private final LinkedList<Bomb> bombs;
     private int timeAni;
+    private int statusAni;
     private int status;
     private Scene screen;
-
+    private final int statusL = 6;
+    private final int statusR = 0;
+    private final int statusT = 9;
+    private final int statusB = 3;
 
     public Player(Map map, Canvas camera) {
         playerImg = new LinkedList<>();
         try {
-            playerImg.add(new Image(getClass().getResource("/image/classic.png").toURI().toString()));
+            for (int i = 1; i <= 15; i++) {
+                playerImg
+                        .add(new Image(getClass().getResource("/image/4x/" + i + ".png").toURI().toString()));
+            }
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -53,7 +60,8 @@ public class Player extends Mob {
         bombs = new LinkedList<>();
         setObjectBlock(new ObjectBlock(0, 0, 0, 0));
         timeAni = 0;
-        status = 0;
+        status = statusR;
+        statusAni = 1;
         setKilling(false);
         super.setSurvival(true);
     }
@@ -84,14 +92,35 @@ public class Player extends Mob {
             }
 
             moveWindow();
-
-            render.drawImage(playerImg.get(0), 16, 0, 12, 16, getX(), getY(), 36, 48);
+            time();
+            if (key.get(KeyCode.D) != 0
+                    || key.get(KeyCode.A) != 0
+                    || key.get(KeyCode.W) != 0
+                    || key.get(KeyCode.S) != 0) {
+                render.drawImage(playerImg.get(status + statusAni), getX() - 1, getY() - 1, 39, 50);
+            } else {
+                render.drawImage(playerImg.get(status), getX() - 1, getY() - 1, 39, 50);
+            }
 
         } else {
             timeAni ++;
+            if (timeAni % 70 == 0) {
+                statusAni ++;
+            }
             if (timeAni > 180) {
                 super.setSurvival(false);
             }
+            render.drawImage(playerImg.get(12 + statusAni), getX() - 4, getY() + 2, 44, 44);
+        }
+    }
+
+    private void time() {
+        timeAni++;
+        if (timeAni % 20 == 0) {
+            statusAni++;
+        }
+        if (statusAni >= 3) {
+            statusAni = 1;
         }
     }
 
@@ -114,6 +143,18 @@ public class Player extends Mob {
                     || e.getCode().equals(KeyCode.W)
                     || e.getCode().equals(KeyCode.S)) {
                 key.put(e.getCode(), SPEED);
+                if (e.getCode().equals(KeyCode.D)) {
+                    status = statusR;
+                }
+                if (e.getCode().equals(KeyCode.A)) {
+                    status = statusL;
+                }
+                if (e.getCode().equals(KeyCode.W)) {
+                    status = statusT;
+                }
+                if (e.getCode().equals(KeyCode.S)) {
+                    status = statusB;
+                }
             } else {
                 if (e.getCode().equals(KeyCode.SPACE) && bombs.size() < BOMBNUMBER) {
                     int i = (int) (getY() + 24)/ 48;
@@ -123,6 +164,7 @@ public class Player extends Mob {
                         AudioClip audioClip = null;
                         try {
                             audioClip = new AudioClip(Bomb.class.getResource("/image/sound/putbomb.wav").toURI().toString());
+                            audioClip.setVolume(100);
                             audioClip.play();
                         } catch (URISyntaxException ex) {
                             ex.printStackTrace();
@@ -142,7 +184,27 @@ public class Player extends Mob {
                     || e.getCode().equals(KeyCode.S)) {
                 key.put(e.getCode(), 0.0);
             }
+            setStatus();
         });
+    }
+
+    void setStatus() {
+        if (key.get(KeyCode.S) > 0 && key.get(KeyCode.W) == 0) {
+            status = statusB;
+            System.out.println("down");
+            return;
+        }
+        if (key.get(KeyCode.W) > 0 && key.get(KeyCode.S) == 0) {
+            status = statusT;
+            return;
+        }
+        if (key.get(KeyCode.A) > 0 && key.get(KeyCode.D) == 0) {
+            status = statusL;
+            return;
+        }
+        if (key.get(KeyCode.D) > 0 && key.get(KeyCode.A) == 0) {
+            status = statusR;
+        }
     }
 
     private void checkMove() {
@@ -210,8 +272,15 @@ public class Player extends Mob {
     @Override
     public void setSurvival(boolean survival) {
         if (!isKilling()) {
+            AudioClip audioClip = null;
+            try {
+                audioClip = new AudioClip(Bomb.class.getResource("/image/sound/dead1.wav").toURI().toString());
+                audioClip.play();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
             timeAni = 0;
-            status = 0;
+            statusAni = 0;
             setKilling(!survival);
         }
     }

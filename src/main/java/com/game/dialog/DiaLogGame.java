@@ -20,6 +20,7 @@ public class DiaLogGame extends Control {
     private Media gamestartMusic;
     private Media gameplayMusic;
     private MediaPlayer mediaPlayer;
+    private boolean audioPlaying;
 
     public DiaLogGame(Canvas camera, String text) {
         setCamera(camera);
@@ -37,10 +38,13 @@ public class DiaLogGame extends Control {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        audioPlaying = true;
     }
 
-    @Override
-    public void draw(GraphicsContext render) {
+    public void draw(GraphicsContext render, GraphicsContext statusRender) {
+        statusRender.clearRect(0, 0, 748, 48);
+        statusRender.setFill(Color.BLACK);
+        statusRender.fillRect(0, 0, 748, 48);
         render.setFill(Color.BLACK);
         render.fillRect(getX(), getY(), 1000, 1000);
         render.setFill(Color.WHITE);
@@ -64,7 +68,7 @@ public class DiaLogGame extends Control {
     }
 
     public void setText(String text) {
-        this.text = new Text(text);
+        this.text.setText(text);
     }
 
     public boolean isShowing() {
@@ -80,19 +84,27 @@ public class DiaLogGame extends Control {
             mediaPlayer.stop();
         }
         mediaPlayer = new MediaPlayer(gamestartMusic);
-        mediaPlayer.setOnEndOfMedia(() -> {
-            createSound();
-        });
+        mediaPlayer.setOnEndOfMedia(this::createSound);
         mediaPlayer.play();
         this.showing = true;
         time = 0;
+        audioPlaying = true;
+    }
+
+    public void stopAudio() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            audioPlaying = false;
+        }
+    }
+
+    public boolean isAudioPlaying() {
+        return audioPlaying;
     }
 
     public void createSound() {
         mediaPlayer = new MediaPlayer(gameplayMusic);
-        mediaPlayer.setOnEndOfMedia(() -> {
-            createSound();
-        });
+        mediaPlayer.setOnEndOfMedia(this::createSound);
         mediaPlayer.play();
     }
 }

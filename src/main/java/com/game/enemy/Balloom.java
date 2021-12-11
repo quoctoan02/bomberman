@@ -114,6 +114,9 @@ public class Balloom extends Mob {
             if (canGoB) {
                 check.add(4);
             }
+            if (check.size() == 0) {
+                return;
+            }
             Random random = new Random();
             int getWay = check.get(random.nextInt(check.size()));
             if (getWay == 1) {

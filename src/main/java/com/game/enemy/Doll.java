@@ -115,6 +115,9 @@ public class Doll extends Mob {
                 check.add(4);
             }
             Random random = new Random();
+            if (check.size() == 0) {
+                return;
+            }
             int getWay = check.get(random.nextInt(check.size()));
             if (getWay == 1) {
                 speedH = SPEED;
