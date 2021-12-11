@@ -13,7 +13,7 @@ public class ObjectBlock {
         this.height = height;
     }
 
-    void update(double x, double y, double width, double height) {
+    public void update(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -30,5 +30,17 @@ public class ObjectBlock {
     private boolean insideBlock(double x, double y) {
         return x >= this.x && x <= this.x + width
                 && y >= this.y && y <= this.y + height;
+    }
+
+    public boolean equalLocation(double x, double y) {
+        return this.x == x && this.y == y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

@@ -7,6 +7,7 @@ public abstract class Mob {
     private double y;
     private boolean survival;
     private boolean killing;
+    private ObjectBlock objectBlock;
 
     public double getX() {
         return x;
@@ -40,5 +41,13 @@ public abstract class Mob {
 
     public void setKilling(boolean killing) {
         this.killing = killing;
+    }
+
+    public ObjectBlock getObjectBlock() {
+        return objectBlock;
+    }
+
+    public void setObjectBlock(ObjectBlock objectBlock) {
+        this.objectBlock = objectBlock;
     }
 }
