@@ -26,6 +26,7 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage) {
         FontGame.load();
+        Bomb.loadSource();
         Group group = new Group();
         canvas = new Canvas(1488, 624);
         render = canvas.getGraphicsContext2D();
@@ -40,6 +41,7 @@ public class Game extends Application {
         map = new Map();
         player = new Player(map, canvas);
         player.addEventListener(scene);
+        map.setPlayerForMob(player);
         statusBar = new StatusBar(canvas, map);
         diaLogGame = new DiaLogGame(canvas,"LEVEL 1");
         diaLogGame.show();
@@ -93,6 +95,7 @@ public class Game extends Application {
             map.newMap();
             player = new Player(map, canvas);
             player.addEventListener(stage.getScene());
+            map.setPlayerForMob(player);
             statusBar = new StatusBar(canvas, map);
             diaLogGame.setText("LEVEL: " + map.getLevel());
             diaLogGame.show();
@@ -103,6 +106,7 @@ public class Game extends Application {
             map.newMap();
             player = new Player(map, canvas);
             player.addEventListener(stage.getScene());
+            map.setPlayerForMob(player);
             statusBar = new StatusBar(canvas, map);
             diaLogGame.setText("LEVEL: " + map.getLevel());
             diaLogGame.show();

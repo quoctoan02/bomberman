@@ -2,6 +2,7 @@ package com.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -25,27 +26,6 @@ public class Bomb extends Mob{
 
 
     public Bomb(int x, int y, char[][] maphash) {
-        if (bombImg == null) {
-            bombImg = new LinkedList<>();
-            boomImg = new LinkedList<>();
-            try {
-                bombImg.add(new Image(getClass()
-                        .getResource("/image/bomb/bomb3.png").toURI().toString())
-                );
-                bombImg.add(new Image(getClass()
-                        .getResource("/image/bomb/bomb2.png").toURI().toString())
-                );
-                bombImg.add(new Image(getClass()
-                        .getResource("/image/bomb/bomb1.png").toURI().toString())
-                );
-                for (int i = 1; i <= 24; i++) {
-                    boomImg.add(new Image(getClass()
-                            .getResource("/image/bomb/boom" + i + ".png").toURI().toString()));
-                }
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }
         timeAni = 0;
         status = 0;
         setX(x);
@@ -57,6 +37,30 @@ public class Bomb extends Mob{
         setSurvival(true);
         checkBomb = false;
         listEnemy = null;
+    }
+
+    public static void loadSource() {
+        if (bombImg == null) {
+            bombImg = new LinkedList<>();
+            boomImg = new LinkedList<>();
+            try {
+                bombImg.add(new Image(Bomb.class
+                        .getResource("/image/bomb/bomb3.png").toURI().toString())
+                );
+                bombImg.add(new Image(Bomb.class
+                        .getResource("/image/bomb/bomb2.png").toURI().toString())
+                );
+                bombImg.add(new Image(Bomb.class
+                        .getResource("/image/bomb/bomb1.png").toURI().toString())
+                );
+                for (int i = 1; i <= 24; i++) {
+                    boomImg.add(new Image(Bomb.class
+                            .getResource("/image/bomb/boom" + i + ".png").toURI().toString()));
+                }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setPlayer(Player player) {
@@ -99,6 +103,13 @@ public class Bomb extends Mob{
             status = 0;
         }
         if (timeAni >= 200) {
+            AudioClip audioClip = null;
+            try {
+                audioClip = new AudioClip(Bomb.class.getResource("/image/sound/boom.wav").toURI().toString());
+                audioClip.play();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
             setBoom();
         }
     }

@@ -1,9 +1,11 @@
 package com.game.items;
 
+import com.game.Bomb;
 import com.game.Mob;
 import com.game.ObjectBlock;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -44,4 +46,5 @@ public class Item extends Mob {
     public int getEffect() {
         return item;
     }
+
 }

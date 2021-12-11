@@ -1,16 +1,25 @@
 package com.game.dialog;
 
+import com.game.Bomb;
 import com.game.text.FontGame;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.net.URISyntaxException;
 
 public class DiaLogGame extends Control {
     private Text text;
     private boolean showing;
     private int time;
     private Runnable runnable;
+    private Media gamestartMusic;
+    private Media gameplayMusic;
+    private MediaPlayer mediaPlayer;
 
     public DiaLogGame(Canvas camera, String text) {
         setCamera(camera);
@@ -20,6 +29,14 @@ public class DiaLogGame extends Control {
         this.text.setFont(FontGame.MCHIGHER);
         showing = false;
         runnable = () -> {};
+        try {
+            gamestartMusic = new Media(getClass()
+                    .getResource("/image/sound/gamestart1.mp3").toURI().toString());
+            gameplayMusic = new Media(getClass()
+                    .getResource("/image/sound/gameaudio.wav").toURI().toString());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -59,7 +76,23 @@ public class DiaLogGame extends Control {
     }
 
     public void show() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+        mediaPlayer = new MediaPlayer(gamestartMusic);
+        mediaPlayer.setOnEndOfMedia(() -> {
+            createSound();
+        });
+        mediaPlayer.play();
         this.showing = true;
         time = 0;
+    }
+
+    public void createSound() {
+        mediaPlayer = new MediaPlayer(gameplayMusic);
+        mediaPlayer.setOnEndOfMedia(() -> {
+            createSound();
+        });
+        mediaPlayer.play();
     }
 }

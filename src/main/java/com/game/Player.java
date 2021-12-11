@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.AudioClip;
 
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -64,8 +65,6 @@ public class Player extends Mob {
         if (!isKilling()){
             getObjectBlock().update(getX() + 1, getY() + 12, 34, 34);
 
-            render.drawImage(playerImg.get(0), 16, 0, 12, 16, getX(), getY(), 36, 48);
-
             checkMove();
 
             if (canMoveR) {
@@ -85,6 +84,8 @@ public class Player extends Mob {
             }
 
             moveWindow();
+
+            render.drawImage(playerImg.get(0), 16, 0, 12, 16, getX(), getY(), 36, 48);
 
         } else {
             timeAni ++;
@@ -119,6 +120,13 @@ public class Player extends Mob {
                     int j = (int) (getX() + 18) / 48;
                     if (map.getTileMap()[i][j] == ' ') {
                         System.out.println("bomb");
+                        AudioClip audioClip = null;
+                        try {
+                            audioClip = new AudioClip(Bomb.class.getResource("/image/sound/putbomb.wav").toURI().toString());
+                            audioClip.play();
+                        } catch (URISyntaxException ex) {
+                            ex.printStackTrace();
+                        }
                         Bomb bomb = new Bomb(j * 48, i * 48, map.getTileMap());
                         bomb.setEnemys(map.getEnemy());
                         bomb.setPlayer(this);
@@ -155,6 +163,13 @@ public class Player extends Mob {
                 }
                 if (map.getListItems().get(i).getEffect() == Item.SPEEDUP) {
                     SPEED += 0.5;
+                }
+                AudioClip audioClip = null;
+                try {
+                    audioClip = new AudioClip(Bomb.class.getResource("/image/sound/getitem.wav").toURI().toString());
+                    audioClip.play();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
                 }
                 map.getListItems().remove(i);
                 continue;

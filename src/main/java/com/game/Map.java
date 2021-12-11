@@ -1,6 +1,9 @@
 package com.game;
 
 import com.game.enemy.Balloom;
+import com.game.enemy.Doll;
+import com.game.enemy.Minvo;
+import com.game.enemy.Oneal;
 import com.game.items.Item;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -23,14 +26,16 @@ public class Map {
     private final int limitLv = 2;
     private ObjectBlock portal;
     private LinkedList<Item> listItems;
+    private boolean levelChanged;
 
 
     public Map() {
-        level = 1;
-        mapImg = new LinkedList<Image>();
+        setLevel(1);
+        mapImg = new LinkedList<>();
         enemy = new LinkedList<>();
         portal = new ObjectBlock(0, 0, 0, 0);
         listItems = new LinkedList<>();
+        System.out.println(levelChanged);
         loadMap(level);
         try {
             mapImg.add(new Image(getClass().getResource("/image/map/wall1.png").toURI().toString()));
@@ -95,6 +100,18 @@ public class Map {
                         tileMap[i][j] = ' ';
                         enemy.add(new Balloom(j * 48, i * 48, this));
                     }
+                    if (tileMap[i][j] == '2') {
+                        tileMap[i][j] = ' ';
+                        enemy.add(new Oneal(j * 48, i * 48, this));
+                    }
+                    if (tileMap[i][j] == '3') {
+                        tileMap[i][j] = ' ';
+                        enemy.add(new Doll(j * 48, i * 48, this));
+                    }
+                    if (tileMap[i][j] == '4') {
+                        tileMap[i][j] = ' ';
+                        enemy.add(new Minvo(j * 48, i * 48, this));
+                    }
                     if (tileMap[i][j] == 'p') {
                         tileMap[i][j] = '*';
                         portal.update(j * 48 + 1, i * 48 + 1, 46, 46);
@@ -102,20 +119,27 @@ public class Map {
 
                     if (tileMap[i][j] == 'x') {
                         tileMap[i][j] = '*';
-                        listItems.add(new Item(Item.COUNTUP, j * 48, i * 48));
+                        if (levelChanged) {
+                            listItems.add(new Item(Item.COUNTUP, j * 48, i * 48));
+                        }
                     }
 
                     if (tileMap[i][j] == 'y') {
                         tileMap[i][j] = '*';
-                        listItems.add(new Item(Item.BOMBUP, j * 48, i * 48));
+                        if (levelChanged) {
+                            listItems.add(new Item(Item.BOMBUP, j * 48, i * 48));
+                        }
                     }
 
                     if (tileMap[i][j] == 'z') {
                         tileMap[i][j] = '*';
-                        listItems.add(new Item(Item.SPEEDUP, j * 48, i * 48));
+                        if (levelChanged) {
+                            listItems.add(new Item(Item.SPEEDUP, j * 48, i * 48));
+                        }
                     }
                 }
             }
+            levelChanged = false;
             for (int i = 0; i < 13; i++) {
                 for (int j = 0; j < 31; j++) {
                     System.out.print(tileMap[i][j]);
@@ -179,6 +203,7 @@ public class Map {
     }
 
     public void setLevel(int level) {
+        levelChanged = true;
         this.level = level;
     }
 
@@ -192,5 +217,18 @@ public class Map {
 
     public LinkedList<Item> getListItems() {
         return listItems;
+    }
+
+    public void setPlayerForMob(Player player) {
+        for (Mob i : enemy) {
+            if (i.getClass().getSimpleName().equals("Oneal")) {
+                Oneal oneal = (Oneal) i;
+                oneal.setPlayer(player);
+            }
+            if (i.getClass().getSimpleName().equals("Minvo")) {
+                Minvo minvo = (Minvo) i;
+                minvo.setPlayer(player);
+            }
+        }
     }
 }

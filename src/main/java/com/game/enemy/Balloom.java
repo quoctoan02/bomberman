@@ -129,6 +129,11 @@ public class Balloom extends Mob {
                 speedV = SPEED;
             }
         }
+        if (speedH > 0) {
+            status = right;
+        } else {
+            status = left;
+        }
         setX(getX() + speedH);
         setY(getY() + speedV);
     }
