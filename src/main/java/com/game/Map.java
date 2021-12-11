@@ -20,7 +20,7 @@ public class Map {
     private boolean win;
     private boolean lose;
     private int level;
-    private final int limitLv = 1;
+    private final int limitLv = 2;
     private ObjectBlock portal;
     private LinkedList<Item> listItems;
 
