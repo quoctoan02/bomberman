@@ -9,16 +9,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 
 
 public class Game extends Application {
-    private GraphicsContext render;
+    private GraphicsContext renderGame;
     private GraphicsContext statusRender;
     private Player player;
     private Map map;
@@ -40,8 +38,8 @@ public class Game extends Application {
         statusRender.fillRect(0, 0, 748, 48);
         canvas = new Canvas(1488, 624);
         canvas.setLayoutY(28);
-        render = canvas.getGraphicsContext2D();
-        render.setImageSmoothing(false);
+        renderGame = canvas.getGraphicsContext2D();
+        renderGame.setImageSmoothing(false);
         group.getChildren().add(canvas);
         group.getChildren().add(statusCanvas);
         Scene scene = new Scene(group, 748, 652);
@@ -74,15 +72,15 @@ public class Game extends Application {
     }
 
     void update() {
-        render.clearRect(0, 0, 1000, 1000);
+        renderGame.clearRect(0, 0, 1000, 1000);
         if (diaLogGame.isShowing()) {
-            diaLogGame.draw(render, statusRender);
+            diaLogGame.draw(renderGame, statusRender);
             return;
         }
-        map.draw(render);
+        map.draw(renderGame);
         drawEnemy(player.getBombs());
         drawEnemy(map.getEnemy());
-        player.draw(render);
+        player.draw(renderGame);
         statusBar.draw();
 
         //xử lý khi thua
@@ -131,7 +129,7 @@ public class Game extends Application {
 
     private <T> void drawEnemy(LinkedList<T> list) {
         for (int i = 0; i < list.size();) {
-            ((Mob) list.get(i)).draw(render);
+            ((Mob) list.get(i)).draw(renderGame);
             if (!((Mob) list.get(i)).isSurvival()) {
                 list.remove(i);
                 continue;

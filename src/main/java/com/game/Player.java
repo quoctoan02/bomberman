@@ -211,7 +211,6 @@ public class Player extends Mob {
         for (Mob i : map.getEnemy()) {
             if (i.getObjectBlock().insideBlock(getObjectBlock())) {
                 setSurvival(false);
-                map.setLife(map.getLife() - 1);
                 break;
             }
         }
@@ -282,6 +281,7 @@ public class Player extends Mob {
             timeAni = 0;
             statusAni = 0;
             setKilling(!survival);
+            map.setLife(map.getLife() - 1);
         }
     }
 
