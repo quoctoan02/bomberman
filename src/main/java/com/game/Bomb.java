@@ -91,6 +91,7 @@ public class Bomb extends Mob{
                 setSurvival(false);
                 mapHash[i][j] = ' ';
             }
+            checkInBoom(getObjectBlock());
         }
     }
 
@@ -116,7 +117,7 @@ public class Bomb extends Mob{
 
     private void drawBoom(GraphicsContext render) {
         render.drawImage(boomImg.get(2 - status), getX(), getY(), 48, 48);
-        drawRight(render);
+        drawBombBoom(render);
     }
 
     private void checkInBoom(ObjectBlock obj) {
@@ -141,7 +142,7 @@ public class Bomb extends Mob{
         }
     }
 
-    private void drawRight(GraphicsContext render) {
+    private void drawBombBoom(GraphicsContext render) {
         for (int k = 1; k <= countR; k++) {
             int j = (int) (getX() + k * 48) / 48;
             int i = (int) getY() / 48;
